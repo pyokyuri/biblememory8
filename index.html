@@ -1,0 +1,1652 @@
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>물댄동산교회 48일 성경 암송</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Nanum Myeongjo for Scripture, Pretendard for UI -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Pretendard:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Supabase JS Client Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            eden: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              200: '#bbf7d0',
+              300: '#86efac',
+              400: '#4ade80',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            },
+            warm: {
+              50: '#fbfaf8',
+              100: '#f5f3ef',
+              200: '#eeeae2',
+              300: '#ded7c8',
+              400: '#c5baa6',
+              500: '#a79880',
+              600: '#8c7d66',
+              700: '#716351',
+              800: '#5c5042',
+              900: '#4a4136',
+            }
+          },
+          fontFamily: {
+            sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            serif: ['Nanum Myeongjo', 'Batang', 'serif'],
+          },
+          boxShadow: {
+            'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+            'card': '0 2px 12px -2px rgba(22, 101, 52, 0.06), 0 1px 3px 0 rgba(0, 0, 0, 0.04)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      background-color: #f7f6f2;
+    }
+    .font-bible {
+      font-family: 'Nanum Myeongjo', serif;
+      line-height: 2.15;
+      letter-spacing: -0.015em;
+    }
+    .water-gradient {
+      background: linear-gradient(135deg, #0d5c3a 0%, #15803d 50%, #0f766e 100%);
+    }
+    .gold-gradient {
+      background: linear-gradient(135deg, #b45309 0%, #d97706 50%, #f59e0b 100%);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 4px;
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #ded7c8;
+      border-radius: 9999px;
+    }
+    .typing-correct {
+      color: #15803d;
+      font-weight: 700;
+      background-color: #dcfce7;
+      padding: 0 2px;
+      border-radius: 3px;
+    }
+    .typing-wrong {
+      color: #b91c1c;
+      font-weight: 700;
+      background-color: #fee2e2;
+      padding: 0 2px;
+      border-radius: 3px;
+    }
+    .typing-cursor {
+      border-bottom: 3px solid #16a34a;
+      animation: pulse 1s infinite;
+    }
+    .tab-active {
+      background-color: #ffffff;
+      color: #14532d;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      font-weight: 700;
+    }
+    .tab-inactive {
+      color: #716351;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-stone-800 flex flex-col selection:bg-emerald-100 selection:text-emerald-900 pb-12">
+
+  <!-- Clean Elevated Top Header -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-stone-200/80 shadow-xs">
+    <div class="max-w-3xl mx-auto px-4 py-2.5 flex items-center justify-between">
+      
+      <!-- Brand & Church Badge -->
+      <div class="flex items-center space-x-2.5">
+        <div class="w-9 h-9 rounded-xl water-gradient flex items-center justify-center text-white shadow-sm shadow-emerald-900/20">
+          <i data-lucide="book-open" class="w-4.5 h-4.5"></i>
+        </div>
+        <div>
+          <div class="flex items-center space-x-1.5">
+            <span class="text-[10px] font-bold tracking-tight text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200/80">물댄동산교회</span>
+            <span class="text-[10px] text-amber-700 bg-amber-50 px-1 py-0.5 rounded border border-amber-200/80 font-medium">개역개정</span>
+          </div>
+          <h1 class="text-sm font-extrabold text-stone-900 tracking-tight leading-tight">48일 성경 암송</h1>
+        </div>
+      </div>
+
+      <!-- Right Header Actions (Profile & Settings) -->
+      <div class="flex items-center space-x-1.5">
+        <!-- User Profile Pill Button -->
+        <button id="btnOpenProfile" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs bg-stone-100 hover:bg-stone-200 text-stone-700 transition border border-stone-200/90 active:scale-95">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span id="headerDeptBadge" class="font-bold text-stone-900 text-[11px]">물댄동산교회</span>
+          <span class="text-stone-400 text-[10px]">|</span>
+          <span id="headerUserName" class="max-w-[75px] truncate font-medium text-[11px]">성도</span>
+          <i data-lucide="chevron-down" class="w-3 h-3 text-stone-400"></i>
+        </button>
+
+        <!-- Supabase Settings Quick Icon -->
+        <button id="btnOpenSupabase" title="수파베이스 동기화 설정" class="p-2 rounded-xl text-stone-500 hover:text-emerald-700 hover:bg-emerald-50 transition border border-stone-200 active:scale-95 bg-white">
+          <i data-lucide="database" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- 3-Segmented Mobile App Tab Navigation -->
+    <div class="max-w-3xl mx-auto px-4 pb-2 pt-1">
+      <nav class="flex items-center p-1 bg-stone-200/70 rounded-2xl text-xs" role="tablist">
+        <button id="mainTabVerse" data-view="verse" class="main-nav-tab flex-1 py-2 px-3 rounded-xl transition-all duration-200 flex items-center justify-center space-x-1.5 tab-active">
+          <i data-lucide="book-marked" class="w-4 h-4 text-emerald-700"></i>
+          <span>말씀 암송</span>
+        </button>
+        <button id="mainTabGrid" data-view="grid" class="main-nav-tab flex-1 py-2 px-3 rounded-xl transition-all duration-200 flex items-center justify-center space-x-1.5 tab-inactive hover:text-stone-900">
+          <i data-lucide="calendar" class="w-4 h-4"></i>
+          <span>48일 일정표</span>
+        </button>
+        <button id="mainTabStats" data-view="stats" class="main-nav-tab flex-1 py-2 px-3 rounded-xl transition-all duration-200 flex items-center justify-center space-x-1.5 tab-inactive hover:text-stone-900">
+          <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+          <span>부서 현황</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-3xl w-full mx-auto px-3.5 sm:px-4 pt-3 space-y-4">
+
+    <!-- ========================================== -->
+    <!-- VIEW 1: 오늘의 말씀 & 5가지 암송 모드 (기본 뷰) -->
+    <!-- ========================================== -->
+    <section id="viewVerse" class="space-y-3.5">
+      
+      <!-- Day Switcher & Reference Card -->
+      <div class="bg-white rounded-3xl p-4 sm:p-5 border border-stone-200/80 shadow-card">
+        <div class="flex items-center justify-between">
+          
+          <!-- Prev Day -->
+          <button id="btnPrevDay" class="p-2 sm:p-2.5 rounded-2xl bg-stone-100/80 text-stone-600 hover:bg-emerald-50 hover:text-emerald-700 transition active:scale-90 border border-stone-200/70">
+            <i data-lucide="chevron-left" class="w-5 h-5"></i>
+          </button>
+
+          <!-- Day Title & Scripture Ref -->
+          <div class="text-center px-1">
+            <div class="flex items-center justify-center space-x-1.5">
+              <span id="currentDayBadge" class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold water-gradient text-white shadow-xs">Day 1</span>
+              <span id="currentDateText" class="text-xs text-stone-500 font-medium">9월 28일 (월)</span>
+              <span id="todayBadge" class="hidden text-[10px] font-extrabold text-amber-700 bg-amber-100 border border-amber-300 px-2 py-0.5 rounded-full animate-pulse">오늘의 구절</span>
+            </div>
+            <h2 id="currentScriptureRef" class="text-xl sm:text-2xl font-black text-stone-900 mt-1 tracking-tight">사 43:1</h2>
+          </div>
+
+          <!-- Next Day -->
+          <button id="btnNextDay" class="p-2 sm:p-2.5 rounded-2xl bg-stone-100/80 text-stone-600 hover:bg-emerald-50 hover:text-emerald-700 transition active:scale-90 border border-stone-200/70">
+            <i data-lucide="chevron-right" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Quick Utility Toolbar (TTS, Copy, Today jump) -->
+        <div class="mt-3.5 pt-3 border-t border-stone-100 flex items-center justify-between text-xs">
+          <div class="flex items-center space-x-1.5">
+            <button id="btnTtsPlay" class="px-2.5 py-1.5 rounded-xl bg-stone-50 hover:bg-emerald-50 text-stone-700 hover:text-emerald-700 border border-stone-200/80 flex items-center space-x-1 font-semibold transition active:scale-95">
+              <i data-lucide="volume-2" class="w-3.5 h-3.5 text-emerald-600"></i>
+              <span>낭독</span>
+            </button>
+            <button id="btnCopyVerse" class="px-2.5 py-1.5 rounded-xl bg-stone-50 hover:bg-emerald-50 text-stone-700 hover:text-emerald-700 border border-stone-200/80 flex items-center space-x-1 font-semibold transition active:scale-95">
+              <i data-lucide="copy" class="w-3.5 h-3.5 text-stone-500"></i>
+              <span>복사</span>
+            </button>
+            <button id="btnGoToday" class="px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 flex items-center space-x-1 font-bold transition active:scale-95">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-600"></i>
+              <span>오늘로</span>
+            </button>
+          </div>
+
+          <!-- Completion Toggle -->
+          <button id="btnToggleComplete" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition shadow-xs active:scale-95 flex items-center space-x-1.5 bg-emerald-600 text-white hover:bg-emerald-700">
+            <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+            <span id="completeBtnText">암송 완료</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 5 Learning Mode Selector Chips -->
+      <div class="bg-white/80 backdrop-blur-sm p-1.5 rounded-2xl border border-stone-200/80 flex space-x-1 overflow-x-auto custom-scrollbar text-xs font-semibold shadow-xs">
+        <button data-mode="full" class="mode-tab flex-1 min-w-[62px] py-1.5 px-2 rounded-xl transition flex items-center justify-center space-x-1 bg-emerald-800 text-white shadow-xs">
+          <i data-lucide="align-left" class="w-3.5 h-3.5"></i>
+          <span>전체보기</span>
+        </button>
+        <button data-mode="typing" class="mode-tab flex-1 min-w-[62px] py-1.5 px-2 rounded-xl transition flex items-center justify-center space-x-1 text-stone-600 hover:text-stone-900">
+          <i data-lucide="keyboard" class="w-3.5 h-3.5"></i>
+          <span>타자암송</span>
+        </button>
+        <button data-mode="chosung" class="mode-tab flex-1 min-w-[62px] py-1.5 px-2 rounded-xl transition flex items-center justify-center space-x-1 text-stone-600 hover:text-stone-900">
+          <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
+          <span>초성힌트</span>
+        </button>
+        <button data-mode="blank" class="mode-tab flex-1 min-w-[62px] py-1.5 px-2 rounded-xl transition flex items-center justify-center space-x-1 text-stone-600 hover:text-stone-900">
+          <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+          <span>빈칸모드</span>
+        </button>
+        <button data-mode="mask" class="mode-tab flex-1 min-w-[62px] py-1.5 px-2 rounded-xl transition flex items-center justify-center space-x-1 text-stone-600 hover:text-stone-900">
+          <i data-lucide="eye-off" class="w-3.5 h-3.5"></i>
+          <span>가리기</span>
+        </button>
+      </div>
+
+      <!-- Scripture Reading Canvas Card -->
+      <div class="bg-white rounded-3xl p-5 sm:p-7 border border-stone-200/90 shadow-card relative overflow-hidden">
+        
+        <!-- Mode Guide & Auxiliary Info -->
+        <div id="modeHelperHeader" class="flex items-center justify-between pb-3 mb-4 border-b border-stone-100 text-xs text-stone-500">
+          <span id="modeDescription" class="flex items-center gap-1.5 font-medium">
+            <i data-lucide="info" class="w-3.5 h-3.5 text-emerald-600"></i>
+            <span>개역개정 원문을 마음속 깊이 묵상하며 읽어보세요.</span>
+          </span>
+          <div id="modeExtraControls"></div>
+        </div>
+
+        <!-- Scripture Verses Container -->
+        <div id="scriptureContentArea" class="font-bible text-base sm:text-lg text-stone-800 min-h-[130px] leading-relaxed">
+          <!-- Dynamic Verse Insertion -->
+        </div>
+
+        <!-- Typing Mode Input Interface -->
+        <div id="typingInputWrapper" class="hidden mt-5 pt-4 border-t border-stone-100 space-y-2.5">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-stone-700">말씀을 따라 타이핑해 보세요:</span>
+            <span id="typingAccuracyBadge" class="px-2 py-0.5 rounded-lg text-[11px] font-bold bg-stone-100 text-stone-600">일치율: 0%</span>
+          </div>
+          <textarea id="typingInputArea" rows="3" placeholder="여기에 성경 본문을 타이핑해 보세요..." class="w-full p-3.5 rounded-2xl border border-stone-300 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 outline-none text-sm sm:text-base font-serif resize-none transition bg-stone-50/70"></textarea>
+          <div class="flex items-center justify-end">
+            <button id="btnResetTyping" class="text-xs text-stone-500 hover:text-stone-800 px-3 py-1 rounded-lg hover:bg-stone-100 transition">다시 쓰기</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Next Verse Teaser Card -->
+      <div class="bg-stone-100/70 rounded-2xl p-3 border border-stone-200/60 flex items-center justify-between text-xs text-stone-600">
+        <span class="flex items-center space-x-1.5">
+          <i data-lucide="compass" class="w-3.5 h-3.5 text-emerald-700"></i>
+          <span>내 진도율: <b id="verseProgressText" class="text-emerald-900 font-extrabold">0 / 48일 (0%)</b></span>
+        </span>
+        <button id="btnJumpToGridFromVerse" class="font-bold text-emerald-800 hover:underline flex items-center space-x-0.5">
+          <span>전체 일정표 보기</span>
+          <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 2: 48일 암송 전체 일정표 (깔끔한 탭 뷰) -->
+    <!-- ========================================== -->
+    <section id="viewGrid" class="hidden space-y-4">
+      <div class="bg-white rounded-3xl p-5 sm:p-6 border border-stone-200/90 shadow-card space-y-4">
+        
+        <!-- Header & Stats Overview -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-stone-100">
+          <div>
+            <h3 class="font-extrabold text-stone-900 text-base sm:text-lg flex items-center space-x-2">
+              <i data-lucide="calendar" class="w-5 h-5 text-emerald-600"></i>
+              <span>48일 암송 플랜 일정표</span>
+            </h3>
+            <p class="text-xs text-stone-400 mt-0.5">원하시는 날짜를 터치하면 해당 말씀으로 바로 이동합니다.</p>
+          </div>
+
+          <!-- Filter Pills -->
+          <div class="flex space-x-1 bg-stone-100 p-1 rounded-xl text-xs font-semibold self-start sm:self-auto">
+            <button id="filterAll" class="grid-filter-btn px-2.5 py-1 rounded-lg bg-white text-stone-900 shadow-xs transition">전체 (48)</button>
+            <button id="filterDone" class="grid-filter-btn px-2.5 py-1 rounded-lg text-stone-500 hover:text-stone-900 transition">완료 (<span id="filterDoneCount">0</span>)</button>
+            <button id="filterPending" class="grid-filter-btn px-2.5 py-1 rounded-lg text-stone-500 hover:text-stone-900 transition">미완료 (<span id="filterPendingCount">48</span>)</button>
+          </div>
+        </div>
+
+        <!-- 48-Day Grid Container -->
+        <div id="daysGridContainer" class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2 pt-1">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 3: 부서별 달성률 & 우리 부서 식구 현황 -->
+    <!-- ========================================== -->
+    <section id="viewStats" class="hidden space-y-4">
+      <div class="bg-white rounded-3xl p-5 sm:p-6 border border-stone-200/90 shadow-card space-y-5">
+        
+        <!-- Stats Title Header -->
+        <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+          <div>
+            <div class="flex items-center space-x-1.5">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200">실시간 연동</span>
+              <h3 class="font-extrabold text-stone-900 text-base sm:text-lg">부서별 달성률 & 우리 부서</h3>
+            </div>
+            <p class="text-xs text-stone-500 mt-0.5">전 부서 평균 완주율 및 우리 부서 식구들의 개인별 암송 진도입니다.</p>
+          </div>
+          <button id="btnRefreshStats" class="p-2.5 rounded-xl bg-stone-50 border border-stone-200 text-stone-500 hover:text-emerald-700 hover:bg-emerald-50 transition active:scale-95" title="통계 새로고침">
+            <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <!-- Key 3 Highlight Counters -->
+        <div class="grid grid-cols-3 gap-2.5 text-center">
+          <div class="bg-emerald-50/70 p-3 sm:p-4 rounded-2xl border border-emerald-100">
+            <span class="text-[11px] font-bold text-emerald-800">참여 성도</span>
+            <p id="statTotalParticipants" class="text-lg sm:text-xl font-black text-emerald-900 mt-0.5">1명</p>
+          </div>
+          <div class="bg-amber-50/70 p-3 sm:p-4 rounded-2xl border border-amber-100">
+            <span class="text-[11px] font-bold text-amber-800">평균 완주율</span>
+            <p id="statAverageProgress" class="text-lg sm:text-xl font-black text-amber-900 mt-0.5">0%</p>
+          </div>
+          <div class="bg-teal-50/70 p-3 sm:p-4 rounded-2xl border border-teal-100">
+            <span class="text-[11px] font-bold text-teal-800">우리 부서 순위</span>
+            <p id="statDeptRank" class="text-lg sm:text-xl font-black text-teal-900 mt-0.5">1위</p>
+          </div>
+        </div>
+
+        <!-- 1. 6개 부서별 달성률 랭킹 (타부서 비교) -->
+        <div class="bg-stone-50/90 rounded-2xl p-4 border border-stone-200 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs sm:text-sm font-extrabold text-stone-800 flex items-center space-x-1.5">
+              <i data-lucide="award" class="w-4 h-4 text-emerald-600"></i>
+              <span>6개 부서별 평균 달성률 (타부서 비교)</span>
+            </h4>
+            <span class="text-[10px] text-stone-500 font-medium bg-white px-2 py-0.5 rounded-md border border-stone-200">완주율 순</span>
+          </div>
+          <div id="deptLeaderboardList" class="space-y-2 pt-1">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- 2. 우리 부서 식구들 개인별 달성률 -->
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border-2 border-emerald-200/90 space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-stone-100 pb-2">
+            <h4 class="text-xs sm:text-sm font-extrabold text-stone-800 flex items-center space-x-1.5">
+              <i data-lucide="users" class="w-4 h-4 text-emerald-600"></i>
+              <span>우리 <span id="myDeptTitleName" class="text-emerald-700 underline underline-offset-4 font-black">물댄동산교회</span> 식구들 개인별 달성률</span>
+            </h4>
+            <span class="text-[10px] text-stone-400 font-medium flex items-center space-x-1">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-600"></i>
+              <span>타부서 개인 진도는 보호됩니다</span>
+            </span>
+          </div>
+          
+          <div id="myDeptMembersList" class="divide-y divide-stone-100 bg-stone-50/60 rounded-xl border border-stone-200 overflow-hidden">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- User Profile Modal -->
+  <div id="profileModal" class="fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-stone-100 overflow-hidden">
+      <div class="water-gradient text-white p-6 text-center">
+        <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center mx-auto mb-2.5 shadow-inner">
+          <i data-lucide="book-marked" class="w-6 h-6 text-emerald-100"></i>
+        </div>
+        <h3 class="text-lg font-extrabold tracking-tight">물댄동산교회 성경 암송</h3>
+        <p class="text-xs text-emerald-100 mt-1">소속 부서와 이름을 선택해 은혜의 여정에 동참해 주세요</p>
+      </div>
+
+      <div class="p-5 sm:p-6 space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-stone-700 mb-1.5">소속 부서 선택</label>
+          <div class="grid grid-cols-3 gap-2" id="deptRadioGroup">
+            <button type="button" data-dept="물댄동산교회" class="dept-btn py-2 px-2 rounded-xl border border-stone-200 text-xs font-semibold text-stone-700 bg-white hover:border-emerald-600 transition text-center">물댄동산교회</button>
+            <button type="button" data-dept="권사회" class="dept-btn py-2 px-2 rounded-xl border border-stone-200 text-xs font-semibold text-stone-700 bg-white hover:border-emerald-600 transition text-center">권사회</button>
+            <button type="button" data-dept="남전도회" class="dept-btn py-2 px-2 rounded-xl border border-stone-200 text-xs font-semibold text-stone-700 bg-white hover:border-emerald-600 transition text-center">남전도회</button>
+            <button type="button" data-dept="여전도회" class="dept-btn py-2 px-2 rounded-xl border border-stone-200 text-xs font-semibold text-stone-700 bg-white hover:border-emerald-600 transition text-center">여전도회</button>
+            <button type="button" data-dept="로뎀나무" class="dept-btn py-2 px-2 rounded-xl border border-stone-200 text-xs font-semibold text-stone-700 bg-white hover:border-emerald-600 transition text-center">로뎀나무</button>
+            <button type="button" data-dept="종려나무" class="dept-btn py-2 px-2 rounded-xl border border-stone-200 text-xs font-semibold text-stone-700 bg-white hover:border-emerald-600 transition text-center">종려나무</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-stone-700 mb-1.5">성도명 (또는 닉네임)</label>
+          <input type="text" id="inputProfileName" placeholder="예: 김은혜 권사, 홍길동" maxlength="12" class="w-full px-4 py-2.5 rounded-xl border border-stone-300 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 outline-none text-sm transition">
+        </div>
+      </div>
+
+      <div class="p-4 bg-stone-50 border-t border-stone-100 flex items-center justify-end space-x-2">
+        <button id="btnCancelProfile" class="hidden px-4 py-2.5 rounded-xl text-stone-600 hover:bg-stone-200 text-xs font-semibold transition">
+          취소
+        </button>
+        <button id="btnSaveProfile" class="w-full sm:w-auto px-6 py-2.5 rounded-xl water-gradient text-white text-xs font-bold shadow hover:opacity-95 transition active:scale-95">
+          입장 및 저장하기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase Configuration Modal -->
+  <div id="supabaseModal" class="fixed inset-0 z-50 bg-stone-900/70 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-stone-100 overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="bg-gradient-to-r from-emerald-800 to-teal-700 text-white p-5 flex items-center justify-between">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center shadow-inner">
+            <i data-lucide="database" class="w-5 h-5 text-emerald-100"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-base">수파베이스(Supabase) 연동</h3>
+            <p class="text-xs text-emerald-100 font-light">클라우드에 실시간 암송 현황 동기화</p>
+          </div>
+        </div>
+        <button id="btnCloseSupabase" class="p-1 rounded-full text-white/80 hover:text-white hover:bg-white/10 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-5 space-y-4 overflow-y-auto flex-1 text-xs text-stone-700">
+        <div id="sbConnectionAlert" class="p-3 rounded-2xl flex items-center justify-between bg-stone-100 border border-stone-200">
+          <div class="flex items-center space-x-2">
+            <span id="sbStatusDot" class="w-2.5 h-2.5 rounded-full bg-stone-400"></span>
+            <span id="sbStatusMsg" class="font-semibold text-stone-700">연결 대기 중</span>
+          </div>
+          <span class="text-[11px] text-stone-500 font-mono" id="sbProjectStatus">미설정</span>
+        </div>
+
+        <div class="space-y-3 bg-stone-50 p-4 rounded-2xl border border-stone-200">
+          <div>
+            <label class="block font-bold text-stone-800 mb-1">Project URL</label>
+            <input type="text" id="inputSbUrl" placeholder="https://your-project.supabase.co" class="w-full px-3 py-2 rounded-xl border border-stone-300 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-200 outline-none font-mono text-xs text-stone-800 bg-white">
+          </div>
+          <div>
+            <label class="block font-bold text-stone-800 mb-1">Anon / Public API Key</label>
+            <input type="password" id="inputSbKey" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6..." class="w-full px-3 py-2 rounded-xl border border-stone-300 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-200 outline-none font-mono text-xs text-stone-800 bg-white">
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-stone-800 flex items-center space-x-1">
+              <i data-lucide="terminal" class="w-3.5 h-3.5 text-emerald-600"></i>
+              <span>SQL 쿼리 (이미 1회 실행하셨다면 완료 상태입니다)</span>
+            </span>
+            <button id="btnCopySql" class="text-xs font-bold text-emerald-700 hover:text-emerald-800 flex items-center space-x-1 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-200 transition">
+              <i data-lucide="copy" class="w-3 h-3"></i>
+              <span>SQL 복사</span>
+            </button>
+          </div>
+          <div class="bg-stone-900 text-stone-200 p-3 rounded-2xl font-mono text-[11px] leading-relaxed overflow-x-auto select-all shadow-inner">
+            <pre id="sqlSnippet">create table if not exists public.members (
+  id uuid default gen_random_uuid() primary key,
+  user_id text unique not null,
+  name text not null,
+  dept text not null,
+  completed_days jsonb default '[]'::jsonb,
+  last_verse text default '',
+  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+alter table public.members disable row level security;
+
+do $$
+begin
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'members'
+  ) then
+    alter publication supabase_realtime add table public.members;
+  end if;
+end $$;</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-3 bg-stone-50 border-t border-stone-100 flex items-center justify-between">
+        <button id="btnResetSbConfig" class="text-stone-500 hover:text-stone-800 text-xs px-2 py-1">설정 초기화</button>
+        <div class="flex items-center space-x-2">
+          <button id="btnCloseSbFooter" class="px-4 py-2 rounded-xl bg-stone-200 hover:bg-stone-300 text-stone-800 text-xs font-semibold transition">닫기</button>
+          <button id="btnSaveSbConfig" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow transition active:scale-95">저장 및 연결</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Box -->
+  <div id="toastBox" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 translate-y-3 transition-all duration-300 bg-stone-900/90 backdrop-blur-md text-white px-4 py-2.5 rounded-2xl shadow-xl text-xs font-medium flex items-center space-x-2">
+    <i id="toastIcon" data-lucide="check" class="w-4 h-4 text-emerald-400"></i>
+    <span id="toastMsg">알림 메시지</span>
+  </div>
+
+  <script>
+    /*
+      물댄동산교회 48일 성경 암송 플랜 데이터 (개역개정)
+    */
+    const SCRIPTURES_DATA = [
+      { day: 1, date: "9월 28일 (월)", ref: "사 43:1", verses: [{ num: 1, text: "야곱아 너를 창조하신 여호와께서 지금 말씀하시느니라 이스라엘아 너를 지으신 이가 말씀하시느니라 너는 두려워하지 말라 내가 너를 구속하였고 내가 너를 지명하여 불렀나니 너는 내 것이라" }] },
+      { day: 2, date: "9월 29일 (화)", ref: "사 43:2", verses: [{ num: 2, text: "네가 물 가운데로 지날 때에 내가 너와 함께 할 것이라 강을 건널 때에 물이 너를 침몰하지 못할 것이며 네가 불 가운데로 지날 때에 타지도 아니할 것이요 불꽃이 너를 사르지도 못하리니" }] },
+      { day: 3, date: "9월 30일 (수)", ref: "사 43:3", verses: [{ num: 3, text: "대저 나는 여호와 네 하나님이요 이스라엘의 거룩한 이요 네 구원자임이라 내가 애굽을 너의 속량물로, 구스와 스바를 너를 대신하여 주었노라" }] },
+      { day: 4, date: "10월 1일 (목)", ref: "사 43:4", verses: [{ num: 4, text: "네가 내 눈에 보배롭고 존귀하며 내가 너를 사랑하였은즉 내가 네 대신 사람들을 내어 주며 백성들이 네 생명을 대신하리니" }] },
+      { day: 5, date: "10월 2일 (금)", ref: "사 43:5", verses: [{ num: 5, text: "두려워하지 말라 내가 너와 함께 하여 네 자손을 동쪽에서부터 오게 하며 서쪽에서부터 너를 모을 것이며" }] },
+      { day: 6, date: "10월 3일 (토)", ref: "사 43:6", verses: [{ num: 6, text: "내가 북쪽에게 이르기를 내놓으라 남쪽에게 이르기를 가두어 두지 말라 내 아들들을 먼 곳에서 이끌며 내 딸들을 땅 끝에서 오게 하며" }] },
+      { day: 7, date: "10월 4일 (일)", ref: "사 43:7", verses: [{ num: 7, text: "내 이름으로 불려지는 모든 자 곧 내가 내 영광을 위하여 창조한 자를 오게 하라 그를 내가 지었고 그를 내가 만들었느니라" }] },
+      { day: 8, date: "10월 5일 (월)", ref: "사 43:8", verses: [{ num: 8, text: "눈이 있어도 보지 못하고 귀가 있어도 듣지 못하는 백성을 이끌어 내라" }] },
+      { day: 9, date: "10월 6일 (화)", ref: "사 43:9", verses: [{ num: 9, text: "열방은 모였으며 민족들이 회집하였는데 그들 중에 누가 이 일을 알려 주며 이전 일들을 우리에게 들려주겠느냐 그들이 증인을 세워서 자기들의 옳음을 나타내어 듣는 자들이 옳다고 말하게 하여 보라" }] },
+      { day: 10, date: "10월 7일 (수)", ref: "사 43:10", verses: [{ num: 10, text: "나 여호와가 말하노라 너희는 나의 증인, 나의 종으로 택함을 입었나니 이는 너희가 나를 알고 믿으며 내가 그인 줄 깨닫게 하려 함이라 나의 전에 지음을 받은 신이 없었느니라 나의 후에도 없으리라" }] },
+      { day: 11, date: "10월 8일 (목)", ref: "사 43:11-12", verses: [
+        { num: 11, text: "나 곧 나는 여호와라 나 외에 구원자가 없느니라" },
+        { num: 12, text: "내가 알려 주었으며 구원하였으며 보였고 너희 중에 다른 신이 없었나니 그러므로 너희는 나의 증인이요 나는 하나님이니라 여호와의 말씀이니라" }
+      ] },
+      { day: 12, date: "10월 9일 (금)", ref: "사 43:13", verses: [{ num: 13, text: "과연 태초로부터 나는 그이니 내 손에서 건질 자가 없도다 내가 행하리니 누가 막으리요" }] },
+      { day: 13, date: "10월 10일 (토)", ref: "사 43:14-15", verses: [
+        { num: 14, text: "너희의 구속자요 이스라엘의 거룩한 이 여호와가 말하노라 너희를 위하여 내가 바벨론에 사람을 보내어 모든 갈대아 사람에게 자기들이 연락하던 배를 타고 도망하여 내려가게 하리라" },
+        { num: 15, text: "나는 여호와 너희의 거룩한 이요 이스라엘의 창조자요 너희의 왕이니라" }
+      ] },
+      { day: 14, date: "10월 11일 (일)", ref: "사 43:16", verses: [{ num: 16, text: "나 여호와가 이같이 말하노라 바다 가운데에 길을, 큰 물 가운데에 지름길을 내고" }] },
+      { day: 15, date: "10월 12일 (월)", ref: "사 43:17", verses: [{ num: 17, text: "병거와 말과 군대의 용사를 이끌어 내어 그들이 일시에 엎드러져 일어나지 못하고 소멸하기를 꺼져가는 등불 같게 하였느니라" }] },
+      { day: 16, date: "10월 13일 (화)", ref: "사 43:18-19", verses: [
+        { num: 18, text: "너희는 이전 일을 기억하지 말며 옛날 일을 생각하지 말라" },
+        { num: 19, text: "보라 내가 새 일을 행하리니 이제 나타낼 것이라 너희가 그것을 알지 못하겠느냐 반드시 내가 광야에 길을 사막에 강을 내리니" }
+      ] },
+      { day: 17, date: "10월 14일 (수)", ref: "사 43:20", verses: [{ num: 20, text: "장차 들짐승 곧 승냥이와 타조도 나를 존경할 것은 내가 광야에 물을, 사막에 강들을 내어 내 백성, 내가 택한 자에게 마시게 할 것임이라" }] },
+      { day: 18, date: "10월 15일 (목)", ref: "사 43:21", verses: [{ num: 21, text: "이 백성은 내가 나를 위하여 지었나니 나를 찬송하게 하려 함이니라" }] },
+      { day: 19, date: "10월 16일 (금)", ref: "사 43:22", verses: [{ num: 22, text: "그러나 야곱아 너는 나를 부르지 아니하였고 이스라엘아 너는 나를 괴롭게 여겼으며" }] },
+      { day: 20, date: "10월 17일 (토)", ref: "사 43:23", verses: [{ num: 23, text: "네 번제의 양을 내게로 가져오지 아니하였고 네 제물로 나를 공경하지 아니하였느니라 나는 제물로 말미암아 너를 수고롭게 하지 아니하였고 유향으로 말미암아 너를 괴롭게 하지 아니하였거늘" }] },
+      { day: 21, date: "10월 18일 (일)", ref: "사 43:24", verses: [{ num: 24, text: "너는 나를 위하여 돈으로 향품을 사지 아니하며 희생의 기름으로 나를 흡족하게 하지 아니하고 네 죄짐으로 나를 수고롭게 하며 네 죄악으로 나를 괴롭게 하였느니라" }] },
+      { day: 22, date: "10월 19일 (월)", ref: "사 43:25", verses: [{ num: 25, text: "나 곧 나는 나를 위하여 네 허물을 도말하는 자니 네 죄를 기억하지 아니하리라" }] },
+      { day: 23, date: "10월 20일 (화)", ref: "사 43:26", verses: [{ num: 26, text: "너는 나에게 기억이 나게 하라 우리가 함께 변론하자 너는 말하여 네가 의로움을 나타내라" }] },
+      { day: 24, date: "10월 21일 (수)", ref: "사 43:27", verses: [{ num: 27, text: "네 시조가 범죄하였고 너의 교사들이 나를 배반하였나니" }] },
+      { day: 25, date: "10월 22일 (목)", ref: "사 43:28", verses: [{ num: 28, text: "그러므로 내가 성소의 어른들을 욕되게 하며 야곱이 진멸 당하도록 내어 주며 이스라엘이 비방거리가 되게 하리라" }] },
+      { day: 26, date: "10월 23일 (금)", ref: "사 52:1", verses: [{ num: 1, text: "시온이여 깰지어다 깰지어다 네 힘을 낼지어다 거룩한 성 예루살렘이여 네 아름다운 옷을 입을지어다 이제부터 할례 받지 아니한 자와 부정한 자가 다시는 네게로 들어옴이 없을 것임이라" }] },
+      { day: 27, date: "10월 24일 (토)", ref: "사 52:2-3", verses: [
+        { num: 2, text: "너는 티끌을 털어버릴지어다 예루살렘이여 일어나 앉을지어다 사로잡힌 딸 시온이여 네 목의 줄을 스스로 풀지어다" },
+        { num: 3, text: "여호와께서 이와 같이 말씀하시되 너희가 값 없이 팔렸으니 돈 없이 속량되리라" }
+      ] },
+      { day: 28, date: "10월 25일 (일)", ref: "사 52:4", verses: [{ num: 4, text: "주 여호와께서 이와 같이 말씀하시되 내 백성이 전에 애굽에 내려가서 거기에 거류하였고 앗수르인은 공연히 그들을 압박하였도다" }] },
+      { day: 29, date: "10월 26일 (월)", ref: "사 52:5", verses: [{ num: 5, text: "그러므로 이제 여호와께서 말씀하시되 내 백성이 까닭 없이 잡혀갔으니 내가 여기서 어떻게 할까 여호와께서 말씀하시되 그들을 관할하는 자들이 떠들며 내 이름을 항상 종일토록 더럽히도다" }] },
+      { day: 30, date: "10월 27일 (화)", ref: "사 52:6", verses: [{ num: 6, text: "그러므로 내 백성은 내 이름을 알리라 그러므로 그 날에는 그들이 이 말을 하는 자가 나인 줄을 알리라 내가 여기 있느니라" }] },
+      { day: 31, date: "10월 28일 (수)", ref: "사 52:7", verses: [{ num: 7, text: "좋은 소식을 전하며 평화를 공포하며 복된 좋은 소식을 가져오며 구원을 공포하며 시온을 향하여 이르기를 네 하나님이 통치하신다 하는 자의 산을 넘는 발이 어찌 그리 아름다운가" }] },
+      { day: 32, date: "10월 29일 (목)", ref: "사 52:8", verses: [{ num: 8, text: "네 파수꾼들의 소리로다 그들이 소리를 높여 일제히 노래하니 이는 여호와께서 시온으로 돌아오실 때에 그들의 눈이 마주 보리로다" }] },
+      { day: 33, date: "10월 30일 (금)", ref: "사 52:9", verses: [{ num: 9, text: "너 예루살렘의 황폐한 곳들아 기쁜 소리를 내어 함께 노래할지어다 이는 여호와께서 그의 백성을 위로하셨고 예루살렘을 구속하셨음이라" }] },
+      { day: 34, date: "10월 31일 (토)", ref: "사 52:10", verses: [{ num: 10, text: "여호와께서 열방의 목전에서 그의 거룩한 팔을 나타내셨으므로 땅 끝까지도 모두 우리 하나님의 구원을 보았도다" }] },
+      { day: 35, date: "11월 1일 (일)", ref: "사 52:11", verses: [{ num: 11, text: "너희는 떠날지어다 떠날지어다 거기서 나오고 부정한 것을 만지지 말지어다 그 가운데에서 나올지어다 여호와의 기구를 메는 자들이여 스스로 정결하게 할지어다" }] },
+      { day: 36, date: "11월 2일 (월)", ref: "사 52:12", verses: [{ num: 12, text: "여호와께서 너희 앞에서 행하시며 이스라엘의 하나님이 너희 뒤에서 호위하시리니 너희가 황급히 나오지 아니하며 도망하듯 행하지 아니하리라" }] },
+      { day: 37, date: "11월 3일 (화)", ref: "사 52:13", verses: [{ num: 13, text: "보라 내 종이 형통하리니 받들어 높이 들려서 지극히 존귀하게 되리라" }] },
+      { day: 38, date: "11월 4일 (수)", ref: "사 52:14", verses: [{ num: 14, text: "전에는 그의 모양이 타인보다 상하였고 그의 모습이 사람들보다 상하였으므로 많은 사람이 그에 대하여 놀랐거니와" }] },
+      { day: 39, date: "11월 5일 (목)", ref: "사 52:15", verses: [{ num: 15, text: "그가 나라들을 놀라게 할 것이며 왕들은 그로 말미암아 그들의 입을 봉하리니 이는 그들이 아직 그들에게 전파되지 아니한 것을 볼 것이요 아직 듣지 못한 것을 깨달을 것임이라" }] },
+      { day: 40, date: "11월 6일 (금)", ref: "시 24:1", verses: [{ num: 1, text: "땅과 거기에 충만한 것과 세계와 그 가운데에 사는 자들은 다 여호와의 것이로다" }] },
+      { day: 41, date: "11월 7일 (토)", ref: "시 24:2", verses: [{ num: 2, text: "여호와께서 그 터를 바다 위에 세우심이여 강들 위에 건설하셨도다" }] },
+      { day: 42, date: "11월 8일 (일)", ref: "시 24:3", verses: [{ num: 3, text: "여호와의 산에 오를 자가 누구며 그의 거룩한 곳에 설 자가 누구인가" }] },
+      { day: 43, date: "11월 9일 (월)", ref: "시 24:4", verses: [{ num: 4, text: "곧 손이 깨끗하며 마음이 청결하며 뜻을 허탄한 데에 두지 아니하며 거짓 맹세하지 아니하는 자로다" }] },
+      { day: 44, date: "11월 10일 (화)", ref: "시 24:5", verses: [{ num: 5, text: "그는 여호와께 복을 받고 구원의 하나님께 의를 얻으리니" }] },
+      { day: 45, date: "11월 11일 (수)", ref: "시 24:6", verses: [{ num: 6, text: "이는 여호와를 찾는 족속이요 야곱의 하나님의 얼굴을 구하는 자로다 (셀라)" }] },
+      { day: 46, date: "11월 12일 (목)", ref: "시 24:7", verses: [{ num: 7, text: "문들아 너희 머리를 들지어다 영원한 문들아 들릴지어다 영광의 왕이 들어가시리로다" }] },
+      { day: 47, date: "11월 13일 (금)", ref: "시 24:8", verses: [{ num: 8, text: "영광의 왕이 누구시냐 강하고 능한 여호와시요 전쟁에 능한 여호와시로다" }] },
+      { day: 48, date: "11월 14일 (토)", ref: "시 24:9-10", verses: [
+        { num: 9, text: "문들아 너희 머리를 들지어다 영원한 문들아 들릴지어다 영광의 왕이 들어가시리로다" },
+        { num: 10, text: "영광의 왕이 누구시냐 만군의 여호와께서 곧 영광의 왕이시로다 (셀라)" }
+      ] }
+    ];
+
+    const DEPARTMENTS = [
+      "물댄동산교회",
+      "권사회",
+      "남전도회",
+      "여전도회",
+      "로뎀나무",
+      "종려나무"
+    ];
+
+    const AppStorage = {
+      get(key) {
+        try {
+          const v = localStorage.getItem(key);
+          if (v !== null) return v;
+        } catch(e) {}
+        try { return sessionStorage.getItem(key); } catch(e) {}
+        return null;
+      },
+      set(key, val) {
+        try { localStorage.setItem(key, val); } catch(e) {}
+        try { sessionStorage.setItem(key, val); } catch(e) {}
+      },
+      remove(key) {
+        try { localStorage.removeItem(key); } catch(e) {}
+        try { sessionStorage.removeItem(key); } catch(e) {}
+      }
+    };
+
+    let currentUser = {
+      name: "",
+      dept: "물댄동산교회",
+      completedDays: []
+    };
+
+    let selectedDayIndex = 0;
+    let currentTodayIndex = 0;
+    let activeMode = "full";
+    let activeView = "verse";
+    let allCommunityMembers = [];
+    let currentGridFilter = "all";
+    let isMaskRevealed = false;
+
+    let supabaseClient = null;
+    let currentUserId = getOrCreateUserId();
+
+    function getOrCreateUserId() {
+      let uid = AppStorage.get('wg_user_id');
+      if (!uid) {
+        uid = 'wg_uid_' + Math.random().toString(36).substring(2, 9) + '_' + Date.now().toString(36);
+        AppStorage.set('wg_user_id', uid);
+      }
+      return uid;
+    }
+
+    function getChosungString(str) {
+      const CHOSUNG = [
+        'ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ',
+        'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'
+      ];
+      let result = '';
+      for (let i = 0; i < str.length; i++) {
+        const code = str.charCodeAt(i) - 44032;
+        if (code >= 0 && code <= 11171) {
+          result += CHOSUNG[Math.floor(code / 588)];
+        } else {
+          result += str.charAt(i);
+        }
+      }
+      return result;
+    }
+
+    function calculateTodayDayIndex() {
+      const now = new Date();
+      let target = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      let diffDays = Math.floor((target - new Date(now.getFullYear(), 8, 28)) / (1000 * 60 * 60 * 24));
+      
+      if (diffDays >= 0 && diffDays < SCRIPTURES_DATA.length) {
+        return diffDays;
+      }
+      return 0;
+    }
+
+    function showToast(msg, iconName = 'check') {
+      const toast = document.getElementById('toastBox');
+      const text = document.getElementById('toastMsg');
+      const icon = document.getElementById('toastIcon');
+      
+      text.innerText = msg;
+      icon.setAttribute('data-lucide', iconName);
+      lucide.createIcons();
+      
+      toast.classList.remove('opacity-0', 'translate-y-3', 'pointer-events-none');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', 'translate-y-3', 'pointer-events-none');
+      }, 2500);
+    }
+
+    function getSavedSupabaseCredentials() {
+      const url = AppStorage.get('wg_sb_url') || "";
+      const key = AppStorage.get('wg_sb_key') || "";
+      return { url: url.trim(), key: key.trim() };
+    }
+
+    async function initSupabaseStorage() {
+      const { url, key } = getSavedSupabaseCredentials();
+
+      if (!url || !key) {
+        updateSupabaseStatusUI(false, "연동 키 미등록");
+        if (!currentUser.name) {
+          openProfileModal(true);
+        }
+        renderStatisticsView();
+        return;
+      }
+
+      try {
+        if (!window.supabase) {
+          updateSupabaseStatusUI(false, "SDK 로딩 대기");
+          return;
+        }
+
+        supabaseClient = window.supabase.createClient(url, key);
+        updateSupabaseStatusUI(true, "연결 성공");
+
+        await syncUserData();
+        await fetchCommunityMembers();
+
+        // 실시간 채널 구독
+        supabaseClient
+          .channel('public:members')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'members' }, () => {
+            fetchCommunityMembers();
+          })
+          .subscribe();
+
+      } catch (err) {
+        console.warn("Supabase init error:", err);
+        updateSupabaseStatusUI(false, "연결 실패");
+      }
+    }
+
+    async function syncUserData() {
+      AppStorage.set('wg_user_name', currentUser.name);
+      AppStorage.set('wg_user_dept', currentUser.dept);
+      AppStorage.set('wg_completed_days', JSON.stringify(currentUser.completedDays));
+
+      updateHeaderAndProgress();
+      renderStatisticsView();
+
+      if (!supabaseClient || !currentUser.name) return;
+
+      try {
+        const lastDayNum = currentUser.completedDays.length > 0 ? Math.max(...currentUser.completedDays) : 0;
+        const lastRefText = lastDayNum > 0 ? SCRIPTURES_DATA[lastDayNum - 1].ref : '시작 전';
+
+        const payload = {
+          user_id: currentUserId,
+          name: currentUser.name,
+          dept: currentUser.dept,
+          completed_days: currentUser.completedDays,
+          last_verse: lastRefText,
+          updated_at: new Date().toISOString()
+        };
+
+        await supabaseClient.from('members').upsert(payload, { onConflict: 'user_id' });
+      } catch (err) {
+        console.warn("Sync note:", err);
+      }
+    }
+
+    async function fetchCommunityMembers() {
+      if (!supabaseClient) {
+        renderStatisticsView();
+        return;
+      }
+
+      try {
+        const { data, error } = await supabaseClient
+          .from('members')
+          .select('*')
+          .order('updated_at', { ascending: false });
+
+        if (!error && Array.isArray(data)) {
+          allCommunityMembers = data.map(row => ({
+            userId: row.user_id,
+            name: row.name,
+            dept: row.dept,
+            completedDays: Array.isArray(row.completed_days) 
+              ? row.completed_days 
+              : (typeof row.completed_days === 'string' ? JSON.parse(row.completed_days) : []),
+            lastVerse: row.last_verse || '시작 전'
+          }));
+        }
+      } catch (err) {
+        console.warn("Fetch note:", err);
+      }
+      renderStatisticsView();
+    }
+
+    function updateSupabaseStatusUI(connected, message) {
+      const dot = document.getElementById('sbStatusDot');
+      const msg = document.getElementById('sbStatusMsg');
+      const badge = document.getElementById('sbProjectStatus');
+      const alertBox = document.getElementById('sbConnectionAlert');
+
+      if (!dot) return;
+
+      if (connected) {
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse';
+        msg.className = 'font-semibold text-emerald-800';
+        msg.innerText = message || '연결 성공';
+        badge.innerText = 'Connected';
+        badge.className = 'text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full';
+        alertBox.className = 'p-3 rounded-2xl flex items-center justify-between bg-emerald-50 border border-emerald-200';
+      } else {
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-amber-500';
+        msg.className = 'font-semibold text-amber-800';
+        msg.innerText = message || '미연결 (로컬 보관)';
+        badge.innerText = 'Disconnected';
+        badge.className = 'text-[11px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full';
+        alertBox.className = 'p-3 rounded-2xl flex items-center justify-between bg-amber-50 border border-amber-200';
+      }
+    }
+
+    function renderCurrentDayVerse() {
+      const current = SCRIPTURES_DATA[selectedDayIndex];
+      const isCompleted = currentUser.completedDays.includes(current.day);
+
+      document.getElementById('currentDayBadge').innerText = `Day ${current.day}`;
+      document.getElementById('currentDateText').innerText = current.date;
+      document.getElementById('currentScriptureRef').innerText = current.ref;
+
+      const todayBadge = document.getElementById('todayBadge');
+      if (selectedDayIndex === currentTodayIndex) {
+        todayBadge.classList.remove('hidden');
+      } else {
+        todayBadge.classList.add('hidden');
+      }
+
+      const completeBtn = document.getElementById('btnToggleComplete');
+      const completeText = document.getElementById('completeBtnText');
+      if (isCompleted) {
+        completeBtn.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold transition shadow-xs active:scale-95 flex items-center space-x-1.5 bg-emerald-100 text-emerald-800 border border-emerald-300";
+        completeText.innerText = "암송 완료됨 ✓";
+      } else {
+        completeBtn.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold transition shadow-xs active:scale-95 flex items-center space-x-1.5 bg-emerald-600 text-white hover:bg-emerald-700";
+        completeText.innerText = "암송 완료하기";
+      }
+
+      renderModeContent();
+    }
+
+    function renderModeContent() {
+      const current = SCRIPTURES_DATA[selectedDayIndex];
+      const container = document.getElementById('scriptureContentArea');
+      const helperDesc = document.getElementById('modeDescription');
+      const extraControls = document.getElementById('modeExtraControls');
+      const typingWrapper = document.getElementById('typingInputWrapper');
+
+      extraControls.innerHTML = '';
+      typingWrapper.classList.add('hidden');
+
+      if (activeMode === 'full') {
+        helperDesc.innerHTML = `<i data-lucide="info" class="w-3.5 h-3.5 text-emerald-600"></i><span>개역개정 원문을 마음속 깊이 묵상하며 읽어보세요.</span>`;
+        container.innerHTML = current.verses.map(v => `
+          <div class="mb-4 last:mb-0 flex items-start space-x-2.5">
+            <span class="inline-flex items-center justify-center px-2 py-0.5 mt-1 rounded-md text-xs font-extrabold text-emerald-800 bg-emerald-50 border border-emerald-200 select-none flex-shrink-0">${v.num}절</span>
+            <span class="flex-1 text-stone-800 font-bible text-base sm:text-lg">${v.text}</span>
+          </div>
+        `).join('');
+      }
+      else if (activeMode === 'typing') {
+        helperDesc.innerHTML = `<i data-lucide="keyboard" class="w-3.5 h-3.5 text-emerald-600"></i><span>키보드로 타이핑하며 한 글자씩 정확하게 암송해 보세요.</span>`;
+        typingWrapper.classList.remove('hidden');
+        renderTypingComparison();
+      }
+      else if (activeMode === 'chosung') {
+        helperDesc.innerHTML = `<i data-lucide="help-circle" class="w-3.5 h-3.5 text-emerald-600"></i><span>첫 자음(초성)만 보면서 기억을 떠올려 소리 내어 읽어보세요.</span>`;
+        container.innerHTML = current.verses.map(v => `
+          <div class="mb-4 last:mb-0 flex items-start space-x-2.5">
+            <span class="inline-flex items-center justify-center px-2 py-0.5 mt-1 rounded-md text-xs font-extrabold text-amber-800 bg-amber-100 border border-amber-300 select-none flex-shrink-0">${v.num}절</span>
+            <span class="flex-1 font-bible text-base sm:text-lg text-stone-700 tracking-wider">${getChosungString(v.text)}</span>
+          </div>
+        `).join('');
+      }
+      else if (activeMode === 'blank') {
+        helperDesc.innerHTML = `<i data-lucide="layout-grid" class="w-3.5 h-3.5 text-emerald-600"></i><span>가려진 빈칸 카드를 터치하면 정답 단어가 열립니다.</span>`;
+        extraControls.innerHTML = `<button id="btnOpenAllBlanks" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-stone-100 hover:bg-stone-200 text-stone-600">모두 열기</button>`;
+        
+        container.innerHTML = current.verses.map(v => {
+          const words = v.text.split(' ');
+          const formattedWords = words.map((word, wIdx) => {
+            if (wIdx % 2 === 1 && word.length >= 2) {
+              return `<span class="blank-word inline-block cursor-pointer px-2 py-0.5 mx-0.5 rounded-lg bg-emerald-100 text-emerald-800 font-bold border border-emerald-300 shadow-xs transition active:scale-95 select-none" data-word="${word}"><span class="blank-mask">???</span><span class="blank-revealed hidden">${word}</span></span>`;
+            }
+            return `<span class="inline-block mx-0.5">${word}</span>`;
+          }).join(' ');
+
+          return `
+            <div class="mb-4 last:mb-0 flex items-start space-x-2.5">
+              <span class="inline-flex items-center justify-center px-2 py-0.5 mt-1 rounded-md text-xs font-extrabold text-emerald-800 bg-emerald-50 border border-emerald-200 select-none flex-shrink-0">${v.num}절</span>
+              <div class="flex-1 font-bible text-base sm:text-lg">${formattedWords}</div>
+            </div>
+          `;
+        }).join('');
+
+        container.querySelectorAll('.blank-word').forEach(el => {
+          el.addEventListener('click', () => {
+            const mask = el.querySelector('.blank-mask');
+            const rev = el.querySelector('.blank-revealed');
+            mask.classList.toggle('hidden');
+            rev.classList.toggle('hidden');
+            if (rev.classList.contains('hidden')) {
+              el.className = "blank-word inline-block cursor-pointer px-2 py-0.5 mx-0.5 rounded-lg bg-emerald-100 text-emerald-800 font-bold border border-emerald-300 shadow-xs transition active:scale-95 select-none";
+            } else {
+              el.className = "blank-word inline-block cursor-pointer px-2 py-0.5 mx-0.5 rounded-lg bg-white text-stone-900 font-bold border border-stone-300 shadow-xs transition active:scale-95 select-none";
+            }
+          });
+        });
+
+        const btnOpenAll = document.getElementById('btnOpenAllBlanks');
+        if (btnOpenAll) {
+          btnOpenAll.addEventListener('click', () => {
+            container.querySelectorAll('.blank-word').forEach(el => {
+              el.querySelector('.blank-mask').classList.add('hidden');
+              el.querySelector('.blank-revealed').classList.remove('hidden');
+              el.className = "blank-word inline-block cursor-pointer px-2 py-0.5 mx-0.5 rounded-lg bg-white text-stone-900 font-bold border border-stone-300 shadow-xs select-none";
+            });
+          });
+        }
+      }
+      else if (activeMode === 'mask') {
+        helperDesc.innerHTML = `<i data-lucide="eye-off" class="w-3.5 h-3.5 text-emerald-600"></i><span>구절을 가리고 마음속으로 암송한 후 카드를 터치해 확인하세요.</span>`;
+        if (isMaskRevealed) {
+          container.innerHTML = `
+            <div id="maskClickArea" class="cursor-pointer p-4 rounded-2xl bg-emerald-50/50 border border-emerald-200 transition">
+              ${current.verses.map(v => `
+                <div class="mb-3 last:mb-0 flex items-start space-x-2.5">
+                  <span class="inline-flex items-center justify-center px-2 py-0.5 mt-1 rounded-md text-xs font-extrabold text-emerald-800 bg-emerald-100 border border-emerald-200 select-none flex-shrink-0">${v.num}절</span>
+                  <span class="flex-1 font-bible text-base sm:text-lg text-stone-800">${v.text}</span>
+                </div>
+              `).join('')}
+              <div class="mt-3 text-center text-xs font-bold text-emerald-700">✓ 탭하여 다시 숨기기</div>
+            </div>
+          `;
+        } else {
+          container.innerHTML = `
+            <div id="maskClickArea" class="cursor-pointer py-10 px-4 rounded-2xl bg-stone-100/90 border border-dashed border-stone-300 text-center hover:bg-stone-200/70 transition flex flex-col items-center justify-center space-y-2.5">
+              <div class="w-11 h-11 rounded-full bg-stone-200 flex items-center justify-center text-stone-500 shadow-inner">
+                <i data-lucide="eye" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <p class="font-bold text-stone-700 text-sm">구절 전체가 가려져 있습니다</p>
+                <p class="text-xs text-stone-400 mt-0.5">마음속으로 암송해 보신 후 이곳을 터치하면 정답이 나타납니다.</p>
+              </div>
+            </div>
+          `;
+        }
+
+        const maskArea = document.getElementById('maskClickArea');
+        if (maskArea) {
+          maskArea.addEventListener('click', () => {
+            isMaskRevealed = !isMaskRevealed;
+            renderModeContent();
+          });
+        }
+      }
+
+      lucide.createIcons();
+    }
+
+    function renderTypingComparison() {
+      const current = SCRIPTURES_DATA[selectedDayIndex];
+      const container = document.getElementById('scriptureContentArea');
+      const inputEl = document.getElementById('typingInputArea');
+      const badge = document.getElementById('typingAccuracyBadge');
+
+      const fullOriginalText = current.verses.map(v => v.text).join(' ');
+      const userText = inputEl ? inputEl.value : "";
+
+      let correctCount = 0;
+      let verseHtmlParts = [];
+      let globalCharIndex = 0;
+
+      current.verses.forEach((v) => {
+        let textPart = "";
+        for (let i = 0; i < v.text.length; i++) {
+          const char = v.text[i];
+          const userChar = userText[globalCharIndex];
+
+          if (userChar === undefined) {
+            if (globalCharIndex === userText.length) {
+              textPart += `<span class="typing-cursor">${char}</span>`;
+            } else {
+              textPart += `<span class="text-stone-400">${char}</span>`;
+            }
+          } else if (userChar === char) {
+            textPart += `<span class="typing-correct">${char}</span>`;
+            correctCount++;
+          } else {
+            textPart += `<span class="typing-wrong">${char}</span>`;
+          }
+          globalCharIndex++;
+        }
+        globalCharIndex++;
+
+        verseHtmlParts.push(`
+          <div class="mb-4 last:mb-0 flex items-start space-x-2.5">
+            <span class="inline-flex items-center justify-center px-2 py-0.5 mt-1 rounded-md text-xs font-extrabold text-emerald-800 bg-emerald-50 border border-emerald-200 select-none flex-shrink-0">${v.num}절</span>
+            <div class="flex-1 font-bible text-base sm:text-lg">${textPart}</div>
+          </div>
+        `);
+      });
+
+      container.innerHTML = verseHtmlParts.join('');
+
+      const totalChars = fullOriginalText.replace(/\s+/g, '').length;
+      const accuracy = totalChars > 0 ? Math.min(100, Math.round((correctCount / totalChars) * 100)) : 0;
+
+      if (badge) {
+        badge.innerText = `일치율: ${accuracy}%`;
+        if (accuracy >= 90) {
+          badge.className = "px-2 py-0.5 rounded-lg text-[11px] font-bold bg-emerald-100 text-emerald-800";
+        } else {
+          badge.className = "px-2 py-0.5 rounded-lg text-[11px] font-bold bg-stone-100 text-stone-600";
+        }
+      }
+    }
+
+    function renderDaysGrid(filter = 'all') {
+      currentGridFilter = filter;
+      const container = document.getElementById('daysGridContainer');
+      const doneCountEl = document.getElementById('filterDoneCount');
+      const pendingCountEl = document.getElementById('filterPendingCount');
+
+      const completedSet = new Set(currentUser.completedDays);
+      const totalDone = completedSet.size;
+      const totalPending = 48 - totalDone;
+
+      if (doneCountEl) doneCountEl.innerText = totalDone;
+      if (pendingCountEl) pendingCountEl.innerText = totalPending;
+
+      let items = SCRIPTURES_DATA.filter(item => {
+        const isDone = completedSet.has(item.day);
+        if (filter === 'done') return isDone;
+        if (filter === 'pending') return !isDone;
+        return true;
+      });
+
+      container.innerHTML = items.map(item => {
+        const isSelected = (item.day - 1) === selectedDayIndex;
+        const isDone = completedSet.has(item.day);
+        const isToday = (item.day - 1) === currentTodayIndex;
+
+        let borderClass = isSelected ? 'border-2 border-emerald-600 ring-2 ring-emerald-200' : 'border border-stone-200';
+        let bgClass = isDone ? 'bg-emerald-50/90 text-emerald-900' : 'bg-white text-stone-800';
+        let todayGlow = isToday ? 'relative ring-2 ring-amber-400 font-extrabold' : '';
+
+        return `
+          <button data-day-index="${item.day - 1}" class="day-cell-btn flex flex-col items-center justify-between p-2 rounded-2xl ${borderClass} ${bgClass} ${todayGlow} hover:border-emerald-500 hover:shadow-xs transition active:scale-95 text-left">
+            <div class="w-full flex items-center justify-between">
+              <span class="text-[11px] font-extrabold text-stone-700">D${item.day}</span>
+              ${isDone ? '<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i>' : (isToday ? '<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>' : '')}
+            </div>
+            <span class="text-[10px] font-bold text-stone-600 mt-1 truncate w-full text-center">${item.ref}</span>
+          </button>
+        `;
+      }).join('');
+
+      container.querySelectorAll('.day-cell-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          selectedDayIndex = parseInt(btn.getAttribute('data-day-index'), 10);
+          isMaskRevealed = false;
+          switchAppView('verse');
+          renderCurrentDayVerse();
+          renderDaysGrid(currentGridFilter);
+        });
+      });
+
+      lucide.createIcons();
+    }
+
+    function renderStatisticsView() {
+      const statsMap = {};
+      DEPARTMENTS.forEach(dept => {
+        statsMap[dept] = { count: 0, totalDaysCompleted: 0 };
+      });
+
+      let membersToCount = allCommunityMembers.length > 0 ? [...allCommunityMembers] : [];
+
+      const hasMe = membersToCount.some(m => m.userId === currentUserId || (m.name === currentUser.name && m.dept === currentUser.dept));
+      if (!hasMe && currentUser.name) {
+        membersToCount.push({
+          userId: currentUserId,
+          name: currentUser.name,
+          dept: currentUser.dept,
+          completedDays: currentUser.completedDays || [],
+          lastVerse: (currentUser.completedDays && currentUser.completedDays.length > 0) 
+            ? SCRIPTURES_DATA[Math.max(...currentUser.completedDays) - 1].ref 
+            : '시작 전'
+        });
+      }
+
+      membersToCount = membersToCount.map(m => {
+        if (m.userId === currentUserId || (currentUser.name && m.name === currentUser.name && m.dept === currentUser.dept)) {
+          return {
+            ...m,
+            name: currentUser.name,
+            dept: currentUser.dept,
+            completedDays: currentUser.completedDays || [],
+            lastVerse: (currentUser.completedDays && currentUser.completedDays.length > 0)
+              ? SCRIPTURES_DATA[Math.max(...currentUser.completedDays) - 1].ref 
+              : '시작 전'
+          };
+        }
+        return m;
+      });
+
+      let grandTotalCompletedDays = 0;
+
+      membersToCount.forEach(m => {
+        const deptKey = DEPARTMENTS.includes(m.dept) ? m.dept : '물댄동산교회';
+        const numDone = Array.isArray(m.completedDays) ? m.completedDays.length : 0;
+        statsMap[deptKey].count += 1;
+        statsMap[deptKey].totalDaysCompleted += numDone;
+        grandTotalCompletedDays += numDone;
+      });
+
+      const totalMembers = membersToCount.length;
+      const averagePercent = totalMembers > 0 
+        ? Math.round((grandTotalCompletedDays / (totalMembers * 48)) * 100) 
+        : 0;
+
+      const totalPartEl = document.getElementById('statTotalParticipants');
+      const avgProgEl = document.getElementById('statAverageProgress');
+      const deptRankEl = document.getElementById('statDeptRank');
+      const myDeptTitle = document.getElementById('myDeptTitleName');
+
+      if (totalPartEl) totalPartEl.innerText = `${totalMembers}명`;
+      if (avgProgEl) avgProgEl.innerText = `${averagePercent}%`;
+      if (myDeptTitle) myDeptTitle.innerText = currentUser.dept;
+
+      const deptArray = DEPARTMENTS.map(dept => {
+        const count = statsMap[dept].count;
+        const totalDays = statsMap[dept].totalDaysCompleted;
+        const rate = count > 0 ? Math.round((totalDays / (count * 48)) * 100) : 0;
+        return { dept, count, rate };
+      }).sort((a, b) => b.rate - a.rate);
+
+      const myRank = deptArray.findIndex(d => d.dept === currentUser.dept) + 1;
+      if (deptRankEl) deptRankEl.innerText = `${myRank > 0 ? myRank : 1}위`;
+
+      // 1. 6개 부서별 달성률 (타부서 비교) 렌더링
+      const leaderboardEl = document.getElementById('deptLeaderboardList');
+      if (leaderboardEl) {
+        leaderboardEl.innerHTML = deptArray.map((item, idx) => {
+          const isMyDept = item.dept === currentUser.dept;
+          const barBg = isMyDept ? 'bg-emerald-600' : 'bg-stone-400';
+          const textClass = isMyDept ? 'font-black text-emerald-900 text-xs sm:text-sm' : 'font-semibold text-stone-700 text-xs';
+
+          return `
+            <div class="space-y-1.5 p-2.5 rounded-xl transition ${isMyDept ? 'bg-emerald-50 border border-emerald-300 shadow-xs' : 'bg-white border border-stone-200'}">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                  <span class="w-5 text-center font-black ${idx === 0 ? 'text-amber-500' : 'text-stone-400'} text-xs">${idx + 1}위</span>
+                  <span class="${textClass}">${item.dept}</span>
+                  ${isMyDept ? '<span class="text-[9px] bg-emerald-600 text-white px-1.5 py-0.5 rounded font-extrabold">우리 부서</span>' : ''}
+                </div>
+                <div class="space-x-2 text-xs">
+                  <span class="text-stone-400 text-[11px]">${item.count}명 참여</span>
+                  <span class="font-extrabold ${isMyDept ? 'text-emerald-800' : 'text-stone-800'}">${item.rate}%</span>
+                </div>
+              </div>
+              <div class="w-full bg-stone-200 rounded-full h-1.5 overflow-hidden shadow-inner">
+                <div class="${barBg} h-full rounded-full transition-all duration-500" style="width: ${item.rate}%"></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // 2. 우리 부서 식구들 개인별 달성률 렌더링
+      const myDeptMembersEl = document.getElementById('myDeptMembersList');
+      if (myDeptMembersEl) {
+        const myDeptMembers = membersToCount.filter(m => m.dept === currentUser.dept && m.name);
+
+        if (myDeptMembers.length === 0) {
+          myDeptMembersEl.innerHTML = `
+            <div class="p-5 text-center text-xs text-stone-400">
+              아직 등록된 ${currentUser.dept} 식구가 없습니다. 성도님이 첫 번째 완주 주자입니다!
+            </div>
+          `;
+        } else {
+          myDeptMembers.sort((a, b) => (b.completedDays?.length || 0) - (a.completedDays?.length || 0));
+
+          myDeptMembersEl.innerHTML = myDeptMembers.map(m => {
+            const count = Array.isArray(m.completedDays) ? m.completedDays.length : 0;
+            const rate = Math.round((count / 48) * 100);
+            const isMe = (m.userId === currentUserId) || (m.name === currentUser.name);
+
+            return `
+              <div class="p-3 flex items-center justify-between text-xs ${isMe ? 'bg-emerald-50/90 font-semibold' : 'bg-white'}">
+                <div class="flex items-center space-x-2.5">
+                  <div class="w-8 h-8 rounded-xl ${isMe ? 'water-gradient text-white' : 'bg-stone-200 text-stone-700'} flex items-center justify-center font-black text-xs shadow-xs">
+                    ${m.name.charAt(0)}
+                  </div>
+                  <div>
+                    <div class="flex items-center space-x-1.5">
+                      <span class="font-bold text-stone-900 text-xs">${m.name}</span>
+                      ${isMe ? '<span class="text-[9px] text-emerald-800 bg-emerald-100 px-1.5 py-0.5 rounded-md font-black border border-emerald-200">나</span>' : ''}
+                    </div>
+                    <span class="text-[10px] text-stone-400">최근: <b class="text-stone-600 font-semibold">${m.lastVerse || '시작 전'}</b></span>
+                  </div>
+                </div>
+
+                <div class="text-right">
+                  <div class="font-black text-stone-900 text-xs">${count} / 48일</div>
+                  <div class="w-20 bg-stone-200 rounded-full h-1.5 mt-1 overflow-hidden ml-auto">
+                    <div class="bg-emerald-600 h-full rounded-full" style="width: ${rate}%"></div>
+                  </div>
+                  <span class="text-[10px] text-emerald-700 font-bold">${rate}% 완주</span>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+    }
+
+    function switchAppView(viewName) {
+      activeView = viewName;
+
+      const viewVerse = document.getElementById('viewVerse');
+      const viewGrid = document.getElementById('viewGrid');
+      const viewStats = document.getElementById('viewStats');
+
+      viewVerse.classList.add('hidden');
+      viewGrid.classList.add('hidden');
+      viewStats.classList.add('hidden');
+
+      document.querySelectorAll('.main-nav-tab').forEach(tab => {
+        tab.className = "main-nav-tab flex-1 py-2 px-3 rounded-xl transition-all duration-200 flex items-center justify-center space-x-1.5 tab-inactive hover:text-stone-900";
+        const icon = tab.querySelector('i');
+        if (icon) icon.classList.remove('text-emerald-700');
+      });
+
+      if (viewName === 'verse') {
+        viewVerse.classList.remove('hidden');
+        const activeTab = document.getElementById('mainTabVerse');
+        activeTab.className = "main-nav-tab flex-1 py-2 px-3 rounded-xl transition-all duration-200 flex items-center justify-center space-x-1.5 tab-active";
+        const icon = activeTab.querySelector('i');
+        if (icon) icon.classList.add('text-emerald-700');
+      } else if (viewName === 'grid') {
+        viewGrid.classList.remove('hidden');
+        const activeTab = document.getElementById('mainTabGrid');
+        activeTab.className = "main-nav-tab flex-1 py-2 px-3 rounded-xl transition-all duration-200 flex items-center justify-center space-x-1.5 tab-active";
+        const icon = activeTab.querySelector('i');
+        if (icon) icon.classList.add('text-emerald-700');
+      } else if (viewName === 'stats') {
+        viewStats.classList.remove('hidden');
+        const activeTab = document.getElementById('mainTabStats');
+        activeTab.className = "main-nav-tab flex-1 py-2 px-3 rounded-xl transition-all duration-200 flex items-center justify-center space-x-1.5 tab-active";
+        const icon = activeTab.querySelector('i');
+        if (icon) icon.classList.add('text-emerald-700');
+        renderStatisticsView();
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateHeaderAndProgress() {
+      const nameEl = document.getElementById('headerUserName');
+      const deptEl = document.getElementById('headerDeptBadge');
+      const progressTextEl = document.getElementById('verseProgressText');
+
+      if (nameEl) nameEl.innerText = currentUser.name || "성도";
+      if (deptEl) deptEl.innerText = currentUser.dept || "물댄동산교회";
+
+      const completedCount = currentUser.completedDays.length;
+      const rate = Math.round((completedCount / 48) * 100);
+
+      if (progressTextEl) progressTextEl.innerText = `${completedCount} / 48일 (${rate}%)`;
+    }
+
+    function playScriptureTts() {
+      if (!('speechSynthesis' in window)) {
+        showToast("음성 읽기를 지원하지 않는 브라우저입니다.", "info");
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+      const current = SCRIPTURES_DATA[selectedDayIndex];
+      
+      let speechText = `${current.ref}. `;
+      current.verses.forEach(v => {
+        speechText += `${v.num}절, ${v.text}. `;
+      });
+
+      const utterance = new SpeechSynthesisUtterance(speechText);
+      utterance.lang = 'ko-KR';
+      utterance.rate = 0.9;
+      utterance.pitch = 1.0;
+
+      utterance.onstart = () => showToast("성경 말씀을 낭독합니다.", "volume-2");
+      utterance.onerror = () => showToast("음성 재생 중 오류가 발생했습니다.", "info");
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function copyScriptureToClipboard() {
+      const current = SCRIPTURES_DATA[selectedDayIndex];
+      let formattedText = `[물댄동산교회 48일 성경 암송]\nDay ${current.day} (${current.date})\n성구 : ${current.ref}\n\n`;
+      
+      current.verses.forEach(v => {
+        formattedText += `[${v.num}절] ${v.text}\n`;
+      });
+      formattedText += `\n(개역개정)`;
+
+      const tempTextArea = document.createElement("textarea");
+      tempTextArea.value = formattedText;
+      tempTextArea.style.position = "fixed";
+      tempTextArea.style.left = "-9999px";
+      document.body.appendChild(tempTextArea);
+      tempTextArea.select();
+
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+          showToast("구절이 복사되었습니다! 카톡에 공유하세요.", "check");
+        } else {
+          showToast("복사 권한이 거부되었습니다.", "info");
+        }
+      } catch (err) {
+        showToast("복사 중 오류가 발생했습니다.", "info");
+      } finally {
+        document.body.removeChild(tempTextArea);
+      }
+    }
+
+    function openProfileModal(isFirstTime = false) {
+      const modal = document.getElementById('profileModal');
+      const inputName = document.getElementById('inputProfileName');
+      const cancelBtn = document.getElementById('btnCancelProfile');
+
+      inputName.value = currentUser.name || "";
+      
+      document.querySelectorAll('.dept-btn').forEach(btn => {
+        if (btn.getAttribute('data-dept') === currentUser.dept) {
+          btn.className = "dept-btn py-2 px-2 rounded-xl border border-emerald-600 bg-emerald-50 text-emerald-800 text-xs font-bold text-center";
+        } else {
+          btn.className = "dept-btn py-2 px-2 rounded-xl border border-stone-200 text-xs font-semibold text-stone-700 bg-white hover:border-emerald-600 transition text-center";
+        }
+      });
+
+      if (isFirstTime) {
+        cancelBtn.classList.add('hidden');
+      } else {
+        cancelBtn.classList.remove('hidden');
+      }
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeProfileModal() {
+      const modal = document.getElementById('profileModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    async function saveProfile() {
+      const inputName = document.getElementById('inputProfileName');
+      const trimmed = inputName.value.trim();
+
+      if (!trimmed) {
+        showToast("성도명 또는 닉네임을 입력해 주세요.", "info");
+        return;
+      }
+
+      currentUser.name = trimmed;
+
+      if (supabaseClient) {
+        try {
+          const { data } = await supabaseClient
+            .from('members')
+            .select('*')
+            .eq('name', currentUser.name)
+            .eq('dept', currentUser.dept)
+            .maybeSingle();
+
+          if (data && data.completed_days) {
+            const restoredDays = Array.isArray(data.completed_days)
+              ? data.completed_days
+              : (typeof data.completed_days === 'string' ? JSON.parse(data.completed_days) : []);
+            
+            currentUser.completedDays = restoredDays;
+            currentUserId = data.user_id || currentUserId;
+            AppStorage.set('wg_user_id', currentUserId);
+            showToast(`${currentUser.name} 성도님의 기록(${restoredDays.length}일 완료)을 복원했습니다!`, "check");
+          } else {
+            showToast(`${currentUser.name} 성도님 환영합니다!`, "check");
+          }
+        } catch (e) {
+          showToast(`${currentUser.name} 성도님 환영합니다!`, "check");
+        }
+      } else {
+        showToast(`${currentUser.name} 성도님 환영합니다!`, "check");
+      }
+
+      closeProfileModal();
+      syncUserData();
+      renderCurrentDayVerse();
+      renderDaysGrid(currentGridFilter);
+    }
+
+    function openSupabaseModal() {
+      const modal = document.getElementById('supabaseModal');
+      const inputUrl = document.getElementById('inputSbUrl');
+      const inputKey = document.getElementById('inputSbKey');
+      const creds = getSavedSupabaseCredentials();
+
+      inputUrl.value = creds.url;
+      inputKey.value = creds.key;
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeSupabaseModal() {
+      const modal = document.getElementById('supabaseModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function copySqlToClipboard() {
+      const sqlText = document.getElementById('sqlSnippet').innerText;
+      const tempTextArea = document.createElement("textarea");
+      tempTextArea.value = sqlText;
+      tempTextArea.style.position = "fixed";
+      tempTextArea.style.left = "-9999px";
+      document.body.appendChild(tempTextArea);
+      tempTextArea.select();
+
+      try {
+        const ok = document.execCommand('copy');
+        if (ok) {
+          showToast("수파베이스 SQL 쿼리가 복사되었습니다!", "check");
+        }
+      } catch (err) {
+        showToast("복사 중 오류가 발생했습니다.", "info");
+      } finally {
+        document.body.removeChild(tempTextArea);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const cachedName = AppStorage.get('wg_user_name');
+      const cachedDept = AppStorage.get('wg_user_dept');
+      const cachedDays = AppStorage.get('wg_completed_days');
+
+      if (cachedName) currentUser.name = cachedName;
+      if (cachedDept) currentUser.dept = cachedDept;
+      if (cachedDays) {
+        try {
+          currentUser.completedDays = JSON.parse(cachedDays);
+        } catch(e) {}
+      }
+
+      currentTodayIndex = calculateTodayDayIndex();
+      selectedDayIndex = currentTodayIndex;
+
+      // 3대 주 탭 이벤트 바인딩
+      document.getElementById('mainTabVerse').addEventListener('click', () => switchAppView('verse'));
+      document.getElementById('mainTabGrid').addEventListener('click', () => switchAppView('grid'));
+      document.getElementById('mainTabStats').addEventListener('click', () => switchAppView('stats'));
+
+      const jumpToGridBtn = document.getElementById('btnJumpToGridFromVerse');
+      if (jumpToGridBtn) jumpToGridBtn.addEventListener('click', () => switchAppView('grid'));
+
+      // 프로필 및 설정 모달 바인딩
+      document.getElementById('btnSaveProfile').addEventListener('click', saveProfile);
+      document.getElementById('btnCancelProfile').addEventListener('click', closeProfileModal);
+      document.getElementById('btnOpenProfile').addEventListener('click', () => openProfileModal(false));
+
+      document.querySelectorAll('.dept-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentUser.dept = btn.getAttribute('data-dept');
+          document.querySelectorAll('.dept-btn').forEach(b => {
+            b.className = "dept-btn py-2 px-2 rounded-xl border border-stone-200 text-xs font-semibold text-stone-700 bg-white hover:border-emerald-600 transition text-center";
+          });
+          btn.className = "dept-btn py-2 px-2 rounded-xl border border-emerald-600 bg-emerald-50 text-emerald-800 text-xs font-bold text-center";
+        });
+      });
+
+      document.getElementById('btnOpenSupabase').addEventListener('click', openSupabaseModal);
+      document.getElementById('btnCloseSupabase').addEventListener('click', closeSupabaseModal);
+      document.getElementById('btnCloseSbFooter').addEventListener('click', closeSupabaseModal);
+      document.getElementById('btnCopySql').addEventListener('click', copySqlToClipboard);
+
+      document.getElementById('btnResetSbConfig').addEventListener('click', () => {
+        AppStorage.remove('wg_sb_url');
+        AppStorage.remove('wg_sb_key');
+        document.getElementById('inputSbUrl').value = '';
+        document.getElementById('inputSbKey').value = '';
+        updateSupabaseStatusUI(false, "설정이 초기화되었습니다.");
+        showToast("수파베이스 설정이 초기화되었습니다.", "info");
+      });
+
+      document.getElementById('btnSaveSbConfig').addEventListener('click', async () => {
+        const url = document.getElementById('inputSbUrl').value.trim();
+        const key = document.getElementById('inputSbKey').value.trim();
+
+        if (!url || !key) {
+          showToast("URL과 Key를 모두 입력해 주세요.", "info");
+          return;
+        }
+
+        AppStorage.set('wg_sb_url', url);
+        AppStorage.set('wg_sb_key', key);
+
+        showToast("수파베이스에 연결합니다...", "check");
+        await initSupabaseStorage();
+        closeSupabaseModal();
+      });
+
+      // 구절 이전/다음/오늘 바로가기
+      document.getElementById('btnPrevDay').addEventListener('click', () => {
+        if (selectedDayIndex > 0) {
+          selectedDayIndex--;
+          isMaskRevealed = false;
+          renderCurrentDayVerse();
+          renderDaysGrid(currentGridFilter);
+        }
+      });
+
+      document.getElementById('btnNextDay').addEventListener('click', () => {
+        if (selectedDayIndex < SCRIPTURES_DATA.length - 1) {
+          selectedDayIndex++;
+          isMaskRevealed = false;
+          renderCurrentDayVerse();
+          renderDaysGrid(currentGridFilter);
+        }
+      });
+
+      document.getElementById('btnGoToday').addEventListener('click', () => {
+        selectedDayIndex = currentTodayIndex;
+        isMaskRevealed = false;
+        renderCurrentDayVerse();
+        renderDaysGrid(currentGridFilter);
+        showToast("오늘의 암송구절로 이동했습니다!", "sparkles");
+      });
+
+      // 암송 완료 토글
+      document.getElementById('btnToggleComplete').addEventListener('click', () => {
+        const currentDayNum = SCRIPTURES_DATA[selectedDayIndex].day;
+        const idx = currentUser.completedDays.indexOf(currentDayNum);
+
+        if (idx === -1) {
+          currentUser.completedDays.push(currentDayNum);
+          currentUser.completedDays.sort((a, b) => a - b);
+          showToast(`Day ${currentDayNum} 암송 완료! 은혜 가득한 하루 되세요.`, "check-circle");
+        } else {
+          currentUser.completedDays.splice(idx, 1);
+          showToast(`Day ${currentDayNum} 암송 완료를 취소했습니다.`, "info");
+        }
+
+        syncUserData();
+        renderCurrentDayVerse();
+        renderDaysGrid(currentGridFilter);
+      });
+
+      // 5개 학습 모드 탭
+      document.querySelectorAll('.mode-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          activeMode = tab.getAttribute('data-mode');
+          isMaskRevealed = false;
+
+          document.querySelectorAll('.mode-tab').forEach(t => {
+            t.className = "mode-tab flex-1 min-w-[62px] py-1.5 px-2 rounded-xl transition flex items-center justify-center space-x-1 text-stone-600 hover:text-stone-900";
+          });
+
+          tab.className = "mode-tab flex-1 min-w-[62px] py-1.5 px-2 rounded-xl transition flex items-center justify-center space-x-1 bg-emerald-800 text-white shadow-xs";
+
+          renderModeContent();
+        });
+      });
+
+      const typingInput = document.getElementById('typingInputArea');
+      typingInput.addEventListener('input', () => {
+        renderTypingComparison();
+      });
+
+      document.getElementById('btnResetTyping').addEventListener('click', () => {
+        typingInput.value = '';
+        renderTypingComparison();
+      });
+
+      document.getElementById('btnTtsPlay').addEventListener('click', playScriptureTts);
+      document.getElementById('btnCopyVerse').addEventListener('click', copyScriptureToClipboard);
+
+      // 일정표 필터
+      document.getElementById('filterAll').addEventListener('click', (e) => {
+        updateFilterBtnStyle(e.target);
+        renderDaysGrid('all');
+      });
+      document.getElementById('filterDone').addEventListener('click', (e) => {
+        updateFilterBtnStyle(e.target);
+        renderDaysGrid('done');
+      });
+      document.getElementById('filterPending').addEventListener('click', (e) => {
+        updateFilterBtnStyle(e.target);
+        renderDaysGrid('pending');
+      });
+
+      function updateFilterBtnStyle(target) {
+        document.querySelectorAll('.grid-filter-btn').forEach(b => {
+          b.className = "grid-filter-btn px-2.5 py-1 rounded-lg text-stone-500 hover:text-stone-900 transition";
+        });
+        target.className = "grid-filter-btn px-2.5 py-1 rounded-lg bg-white text-stone-900 shadow-xs transition";
+      }
+
+      document.getElementById('btnRefreshStats').addEventListener('click', () => {
+        fetchCommunityMembers();
+        showToast("통계 데이터를 새로고침했습니다.", "rotate-cw");
+      });
+
+      // 초기 뷰 렌더링
+      updateHeaderAndProgress();
+      renderCurrentDayVerse();
+      renderDaysGrid('all');
+      renderStatisticsView();
+      lucide.createIcons();
+
+      initSupabaseStorage();
+    });
+  </script>
+</body>
+</html>
+```
